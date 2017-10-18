@@ -23,6 +23,7 @@ The primary key of the table will be the index. This will be a number generated 
 | Index | Song | Artist | Collection | Year | Instrument | Type |
 |:-----:|:----:|:------:|:----------:|:----:|:----------:|:----:|
 | 0 | I'm a song | Me | An Album | 1969 | Kazoo, Piano| Sheet |
+
 _[For the time being this the best solution I can think of to the problem that only a combination of inputs in columns can actually uniquely identify a row]_.
 
 
