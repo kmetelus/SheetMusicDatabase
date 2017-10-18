@@ -17,8 +17,14 @@ The data being stored will be the:
 + Type of Sheet Music: _whether or not the sheet is a tab, midi, guitar pro tab, or sheet music_
 
 ## 1.4 Preliminary Schema
-The database will have a main table with the columns: Index, Song, Artist, Collection, Year, Instrument, Type.
-The primary key of the table will be the index. This will be a number generated based on when the file was first placed into the database _[For the time being this the best solution I can think of to the problem that only a combination of inputs in columns can actually uniquely identify a row]_.
+The database will have a main table with columns: Index, Song, Artist, Collection, Year, Instrument, and Type.
+The primary key of the table will be the index. This will be a number generated based on when the file was first placed into the database For example:
+
+| Index | Song | Artist | Collection | Year | Instrument | Type |
+|:-----:|:----:|:------:|:----------:|:----:|:----------:|:----:|
+| 0 | I'm a song | Me | An Album | 1969 | Kazoo, Piano| Sheet |
+_[For the time being this the best solution I can think of to the problem that only a combination of inputs in columns can actually uniquely identify a row]_.
+
 
 ## 1.5 Entity-Relationship Diagram
 ![](erd.jpg)
