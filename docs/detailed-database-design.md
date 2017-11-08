@@ -4,7 +4,8 @@
 **Sheet Music Database** is a database that will store all varieties of sheet music. Using **PostgreSQL**, it will store files for musicians that want to keep all of their sheet music in one organized database.
 
 ## 2.2 Data Dictionary
-### Main Table
+### Song Table
+##### *table that displays all songs in the database*
 + ID: _a uniquely generated key for the specific sheet reference_
 + Song Title: _name of the song that the sheet is for_
 + Artist Name: _name of the artist or band that performs the song_
@@ -19,6 +20,7 @@
 | 0000 | Transcription 1 | Nick Johnston |  2015 | Guitar | Guitar Pro |
 
 ### Collections table
+##### *table that displays all albums/collections in the database*
 + Album/Collection: _album or collection that a set of songs belongs to_
 + Artist: _artist who performs the album_
 
@@ -29,6 +31,7 @@
 | Atomic Improv Vol. 3 | Nick Johnston |
 
 ### Sheet Table
+##### *table that displays all sheets and in the database and provides a link to obtain them*
 + ID: _a uniquely generated key for the specific sheet reference_
 + Song Title: _name of the song that the sheet is for_
 + Album/Collection: _album or collection that a set of songs belongs to_
