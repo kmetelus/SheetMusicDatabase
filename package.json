@@ -1,0 +1,31 @@
+{
+  "name": "sheetmusicdatabase",
+  "version": "1.0.0",
+  "description": "A database for sheet music",
+  "main": "main.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kmetelus/SheetMusicDatabase.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kmetelus/SheetMusicDatabase/issues"
+  },
+  "homepage": "https://github.com/kmetelus/SheetMusicDatabase#readme",
+  "dependencies": {
+    "hashids": "^1.1.4",
+    "pg": "^7.4.0",
+    "prompt": "^1.0.0"
+  },
+  "devDependencies": {
+    "hashids": "^1.1.4",
+    "prompt": "^1.0.0"
+  }
+}
