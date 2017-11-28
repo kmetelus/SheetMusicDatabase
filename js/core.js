@@ -2,6 +2,19 @@ const { Client } = require('pg');
 const prompt = require('prompt');
 const client = new Client("pg://postgres:9110@localhost:5432/SheetMusicDatabase");
 
+// client.connect();
+// client.query('SELECT * FROM main.Song;')
+//   .then(res => {
+//     res.rows.forEach(x => {
+//       console.log(JSON.stringify(x) );
+//     });
+//     client.end();
+//   })
+//   .catch(e => {
+//     console.log(e);
+//     client.end();
+//   });
+
 // Creating  a hash for the ID of the entry
 const Hashids = require('hashids');
 let lpad = (value) => {
@@ -28,6 +41,8 @@ let schema = {
     },
     year: {
       description: 'Enter the year the song was written',
+      pattern: /^\d{4}$/,
+      message: 'Input a valid year',
       required: true
     },
     instrument: {
@@ -36,13 +51,13 @@ let schema = {
     },
     type: {
       description: 'Enter the type of sheet this is',
-      pattern: /^Sheet$|^Tab$|^GuitarPro$/,
+      pattern: /^Sheet$|^MIDI$|^Tab$|^GuitarPro$/,
       message: 'Options are: Sheet, Tab, or GuitarPro (case sensitive)',
       required: true
     },
     collection: {
       description: 'Enter the collection or album this song is a part of',
-      required: true
+      required: false
     },
     link: {
       description: 'Provide a link to the sheet',
@@ -64,19 +79,6 @@ prompt.get(schema, (err, result) => {
   console.log('Collection: ' + responses.collection);
   console.log('Link: ' + responses.link);
 
-  // client.connect();
-  // client.query('SELECT * FROM main.Song;')
-  //   .then(res => {
-  //     res.rows.forEach(x => {
-  //       console.log(JSON.stringify(x) );
-  //     });
-  //     client.end();
-  //   })
-  //   .catch(e => {
-  //     console.log(e);
-  //     client.end();
-  //   });
-
   // Connecting to Postgres database and inserting into table
   client.connect();
 
@@ -97,27 +99,31 @@ prompt.get(schema, (err, result) => {
   });
 
   // Insertion into Collection table
-  client.query(collectionCheck)
-    .then(res => {
-      res.rows.forEach(x => {
-        songsInCollection = x.Songs.replace(/{/g, '').replace(/}/g, '').split(',');
-        songsInCollection.push(responses.id);
-        client.query(`DELETE FROM Collection WHERE "Title" = '${responses.collection}'`);
-      });
+  if (responses.collection) {
+    client.query(collectionCheck)
+      .then(res => {
+        res.rows.forEach(x => {
+          songsInCollection = x.Songs.replace(/{/g, '').replace(/}/g, '').split(',');
+          songsInCollection.push(responses.id);
+          client.query(`DELETE FROM Collection WHERE "Title" = '${responses.collection}'`);
+        });
 
-      let intoCollection = 'INSERT INTO Collection VALUES($1, $2, $3)';
-      let collectionParams = [songsInCollection, responses.collection, responses.artist];
+        let intoCollection = 'INSERT INTO Collection VALUES($1, $2, $3)';
+        let collectionParams = [songsInCollection, responses.collection, responses.artist];
 
-      client.query(intoCollection, collectionParams, (err, result) => {
-        if (err) {
-          throw err;
-        }
-        console.log("Successfully added to Collections table!");
+        client.query(intoCollection, collectionParams, (err, result) => {
+          if (err) {
+            throw err;
+          }
+          console.log("Successfully added to Collections table!");
+          client.end();
+        });
+      })
+      .catch(e => {
+        console.log(e);
         client.end();
       });
-    })
-    .catch(e => {
-      console.log(e);
+    } else {
       client.end();
-    });
+    }
 });
