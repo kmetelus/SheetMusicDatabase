@@ -40,6 +40,10 @@ let schema = {
       message: 'Options are: Sheet, Tab, or GuitarPro (case sensitive)',
       required: true
     },
+    collection: {
+      description: 'Enter the collection or album this song is a part of',
+      required: true
+    },
     link: {
       description: 'Provide a link to the sheet',
       required: true
@@ -57,30 +61,63 @@ prompt.get(schema, (err, result) => {
   console.log('Year: ' + responses.year);
   console.log('Instrument: ' + responses.instrument);
   console.log('Type: ' + responses.type);
+  console.log('Collection: ' + responses.collection);
   console.log('Link: ' + responses.link);
 
+  // client.connect();
+  // client.query('SELECT * FROM main.Song;')
+  //   .then(res => {
+  //     res.rows.forEach(x => {
+  //       console.log(JSON.stringify(x) );
+  //     });
+  //     client.end();
+  //   })
+  //   .catch(e => {
+  //     console.log(e);
+  //     client.end();
+  //   });
+
+  // Connecting to Postgres database and inserting into table
   client.connect();
-  client.query('SELECT * FROM main.MainTable;')
+
+  // For putting into Song table
+  let intoSong = 'INSERT INTO Song VALUES($1, $2, $3, $4, $5, $6, $7)';
+  let songParams = [responses.id,responses.song,responses.artist,responses.year,responses.instrument,responses.type,responses.link];
+
+  // For putting into Collection table
+  let collectionCheck = `SELECT "Songs" FROM Collection WHERE "Title" = '${responses.collection}'`;
+  let songsInCollection = [responses.id];
+
+  // Insertion into Song table
+  client.query(intoSong, songParams, (err, result) => {
+    if (err) {
+      throw err;
+    }
+    console.log("Successfully added to Songs table!");
+  });
+
+  // Insertion into Collection table
+  client.query(collectionCheck)
     .then(res => {
       res.rows.forEach(x => {
-        console.log(JSON.stringify(x) );
+        songsInCollection = x.Songs.replace(/{/g, '').replace(/}/g, '').split(',');
+        songsInCollection.push(responses.id);
+        client.query(`DELETE FROM Collection WHERE "Title" = '${responses.collection}'`);
       });
-      client.end();
+
+      let intoCollection = 'INSERT INTO Collection VALUES($1, $2, $3)';
+      let collectionParams = [songsInCollection, responses.collection, responses.artist];
+
+      client.query(intoCollection, collectionParams, (err, result) => {
+        if (err) {
+          throw err;
+        }
+        console.log("Successfully added to Collections table!");
+        client.end();
+      });
     })
     .catch(e => {
       console.log(e);
       client.end();
     });
-
-// Connecting to Postgres database and inserting into table
-//   client.connect();
-//   let querytext = 'INSERT INTO main.MainTable VALUES($1, $2, $3, $4, $5, $6, $7)';
-//   let responseArray = [responses.id,responses.song,responses.artist,responses.year,responses.instrument,responses.type,responses.link];
-//   client.query(querytext, responseArray, (err, result) => {
-//     if (err) {
-//       throw err;
-//     }
-//     console.log("Successfully added to SheetMusicDatabase!");
-//     client.end();
-//   });
 });
