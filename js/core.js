@@ -76,30 +76,35 @@ prompt.get(schema, (err, result) => {
   console.log('Year: ' + responses.year);
   console.log('Instrument: ' + responses.instrument);
   console.log('Type: ' + responses.type);
-  console.log('Collection: ' + responses.collection);
+  if (responses.collection) {
+    console.log('Collection: ' + responses.collection);
+  }
   console.log('Link: ' + responses.link);
 
   // Connecting to Postgres database and inserting into table
   client.connect();
 
-  // For putting into Song table
-  let intoSong = 'INSERT INTO Song VALUES($1, $2, $3, $4, $5, $6, $7)';
+  // For putting into Sheet table
+  let intoSong = 'INSERT INTO Sheet VALUES($1, $2, $3, $4, $5, $6, $7)';
   let songParams = [responses.id,responses.song,responses.artist,responses.year,responses.instrument,responses.type,responses.link];
 
-  // For putting into Collection table
-  let collectionCheck = `SELECT "Songs" FROM Collection WHERE "Title" = '${responses.collection}'`;
-  let songsInCollection = [responses.id];
-
-  // Insertion into Song table
+  // Insertion into Sheet table
   client.query(intoSong, songParams, (err, result) => {
     if (err) {
       throw err;
     }
-    console.log("Successfully added to Songs table!");
+    console.log("Successfully added to Sheets table!");
+    client.end();
   });
 
   // Insertion into Collection table
   if (responses.collection) {
+    client.connect();
+
+    // For putting into Collection table
+    let collectionCheck = `SELECT "Songs" FROM Collection WHERE "Title" = '${responses.collection}'`;
+    let songsInCollection = [responses.id];
+
     client.query(collectionCheck)
       .then(res => {
         res.rows.forEach(x => {
@@ -123,7 +128,5 @@ prompt.get(schema, (err, result) => {
         console.log(e);
         client.end();
       });
-    } else {
-      client.end();
     }
 });
