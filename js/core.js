@@ -23,7 +23,7 @@ if (COMMAND === "SELECT") {
       },
       condition: {
         description: 'Enter a condition you would to narrow the search',
-        pattern: /^"[a-zA-Z]+"='[a-zA-Z]+'$/,
+        pattern: /^"[a-zA-Z]+"='.+'$/,
         message: `Enter the conditions as: "<column_name>"='<value>'`,
         required: false
       },

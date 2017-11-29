@@ -1,3 +1,9 @@
+EXAMPLE SELECT
+node js/core.js select
+sheet
+all
+"artist"='Franz Liszt'
+
 EXAMPLE INSERT
 node js/core.js insert
 Etude Op. 10, No. 1
@@ -6,3 +12,13 @@ Frederic Chopin
 Piano
 Sheet
 https://musescore.com/user/108509/scores/121307
+
+select * from sheet;
+
+select * from sheet where "artist" = 'Intervals';
+
+select * from collection where "Artist" = 'Frederic Chopin';
+
+select distinct "artist" from sheet;
+
+select "Songs" from collection where "Title"='Music From the Edge of Heaven';
