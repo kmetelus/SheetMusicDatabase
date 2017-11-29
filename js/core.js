@@ -1,7 +1,8 @@
 const { Client } = require('pg');
 const prompt = require('prompt');
 const client = new Client("pg://postgres:9110@localhost:5432/SheetMusicDatabase");
-const COMMAND = process.argv[2].toUpperCase();
+let argv = process.argv[2] || "error";
+const COMMAND = argv.toUpperCase();
 
 if (COMMAND === "SELECT") {
   console.log("Selecting from SheetMusicDatabase...");
@@ -124,54 +125,51 @@ if (COMMAND === "SELECT") {
     }
     console.log('Link: ' + responses.link);
 
-    // Connecting to Postgres database and inserting into table
-    client.connect();
-
     // For putting into Sheet table
     let intoSong = 'INSERT INTO Sheet VALUES($1, $2, $3, $4, $5, $6, $7)';
     let songParams = [responses.id,responses.song,responses.artist,responses.year,responses.instrument,responses.type,responses.link];
 
+
+    // Connecting to Postgres database and inserting into table
+    client.connect();
+
     // Insertion into Sheet table
-    client.query(intoSong, songParams, (err, result) => {
-      if (err) {
-        throw err;
-      }
-      console.log("Successfully added to Sheets table!");
-      client.end();
-    });
+    client.query(intoSong, songParams)
+      .then(() => console.log("Successfully added to Sheets table!"))
+      .catch(e => console.log(e))
+      .then(() => {
+        // Insertion into Collection table
+        if (responses.collection) {
 
-    // Insertion into Collection table
-    if (responses.collection) {
-      client.connect();
+          // For putting into Collection table
+          let collectionCheck = `SELECT "Songs" FROM Collection WHERE "Title" = '${responses.collection}'`;
+          let songsInCollection = [responses.id];
+          let intoCollection = '';
+          let collectionParams = [];
 
-      // For putting into Collection table
-      let collectionCheck = `SELECT "Songs" FROM Collection WHERE "Title" = '${responses.collection}'`;
-      let songsInCollection = [responses.id];
+          client.query(collectionCheck)
+            .then(res => {
+              res.rows.forEach(x => {
+                songsInCollection = x.Songs.replace(/{/g, '').replace(/}/g, '').split(',');
+                songsInCollection.push(responses.id);
+                client.query(`DELETE FROM Collection WHERE "Title" = '${responses.collection}'`);
+              });
 
-      client.query(collectionCheck)
-        .then(res => {
-          res.rows.forEach(x => {
-            songsInCollection = x.Songs.replace(/{/g, '').replace(/}/g, '').split(',');
-            songsInCollection.push(responses.id);
-            client.query(`DELETE FROM Collection WHERE "Title" = '${responses.collection}'`);
-          });
+              intoCollection = 'INSERT INTO Collection VALUES($1, $2, $3)';
+              collectionParams = [songsInCollection, responses.collection, responses.artist];
 
-          let intoCollection = 'INSERT INTO Collection VALUES($1, $2, $3)';
-          let collectionParams = [songsInCollection, responses.collection, responses.artist];
-
-          client.query(intoCollection, collectionParams, (err, result) => {
-            if (err) {
-              throw err;
-            }
-            console.log("Successfully added to Collections table!");
+            })
+            .catch(e => console.log(e))
+            .then(() => {
+              client.query(intoCollection, collectionParams)
+                .then(() => console.log("Successfully added to Collections table!"))
+                .catch(e => console.log(e))
+                .then(() => client.end())
+            })
+          } else {
             client.end();
-          });
-        })
-        .catch(e => {
-          console.log(e);
-          client.end();
-        });
-      }
+          }
+      })
   });
 } else {
   console.log("AN ERROR HAS OCCURRED");

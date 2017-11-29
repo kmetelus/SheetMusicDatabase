@@ -1,0 +1,8 @@
+EXAMPLE INSERT
+node js/core.js insert
+Etude Op. 10, No. 1
+Frederic Chopin
+1829
+Piano
+Sheet
+https://musescore.com/user/108509/scores/121307
