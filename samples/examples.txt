@@ -13,12 +13,12 @@ Piano
 Sheet
 https://musescore.com/user/108509/scores/121307
 
-select * from sheet;
-
 select * from sheet where "artist" = 'Intervals';
-
-select * from collection where "Artist" = 'Frederic Chopin';
 
 select distinct "artist" from sheet;
 
+select * from collection where "Artist" = 'Frederic Chopin';
+
 select "Songs" from collection where "Title"='Music From the Edge of Heaven';
+
+select "song","link" from sheet, collection where "Title"='The Shape of Colour' AND "artist"='Intervals';
