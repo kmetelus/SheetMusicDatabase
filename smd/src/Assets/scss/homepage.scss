@@ -1,0 +1,10 @@
+@import "_config.scss";
+
+.container-fluid {
+  background: $charcoal;
+  color: $white;
+
+  h1 {
+    text-align: center;
+  }
+}
