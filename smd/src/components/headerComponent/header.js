@@ -8,6 +8,7 @@ class Header extends Component {
           LOGO
         </div>
 
+        <h1 className="title"> SheetMusicDatabase </h1>
         <nav>
           <ul>
             <li className="first">

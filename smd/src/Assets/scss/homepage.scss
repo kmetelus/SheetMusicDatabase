@@ -3,23 +3,36 @@
 .container-fluid {
   background: $charcoal;
   color: $white;
+  height: 100%;
+  bottom: 0;
 
-  h1 {
+
+  p {
     text-align: center;
   }
 
+  h3 {
+    text-align: center;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: $black;
+  }
+
   .form {
+    text-align: center;
     ul {
       list-style-type: none;
 
       li {
         margin: 10px;
         padding: 5px;
+        display: inline-block;
+
+          div {
+            display: inline-block;
+          }
       }
     }
   }
 
-  p {
-    text-align: center;
-  }
+
 }

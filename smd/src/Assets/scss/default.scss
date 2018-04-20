@@ -6,12 +6,22 @@ header {
   width: 100%;
   background: $black;
   color: $white;
-  height: 80px;
+  height: 70px;
 
   .logo {
     position: absolute;
     top: 50%; left: 15px;
     @include translateY(-50%);
+  }
+
+  .title {
+    top: 50%;
+    text-align: center;
+    color: $metallicgold;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: $black;
+    @include translateY(25%);
+
   }
 
   nav,
@@ -38,7 +48,7 @@ header {
       a {
         font-size: 19px;
         line-height: normal;
-        color: $white;
+        color: $metallicgold;
         text-decoration: none;
       }
     }
@@ -46,10 +56,12 @@ header {
 }
 
 footer {
-  position: relative;
+  position: absolute;
+  position:absolute;
+  bottom: 0;
   display: block;
   width: 100%;
   background: $black;
   color: $white;
-  min-height: 100%;
+  min-height: 60px;
 }

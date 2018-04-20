@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-
+import Button from './button';
 class FormFill extends Component {
 
   constructor(props) {
     super(props);
     this.name = props.name;
+    this.defaultText = props.defaultText;
     this.state = {
-      searchText: '',
+      searchText: this.defaultText,
       searchResult: [],
     }
   }
@@ -18,7 +19,8 @@ class FormFill extends Component {
   render() {
     return (
       <div>
-        <input type="text" name={this.name} value={this.state.searchText} onChange={this.onChange.bind(this)} />
+        <input type="text" name={this.name} placeholder={this.state.searchText} onChange={this.onChange.bind(this)}/>
+        <Button label="VALIDATE"/>
       </div>
     );
   }

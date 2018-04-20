@@ -9,6 +9,8 @@ import Homepage from './components/pages/homePage';
 import './Assets/css/default.min.css';
 import './Assets/css/homepage.min.css';
 import './Assets/css/formfill.min.css';
+import './Assets/css/button.min.css';
+import './Assets/css/dropdown.min.css';
 
 class App extends Component {
   render() {
