@@ -7,4 +7,19 @@
   h1 {
     text-align: center;
   }
+
+  .form {
+    ul {
+      list-style-type: none;
+
+      li {
+        margin: 10px;
+        padding: 5px;
+      }
+    }
+  }
+
+  p {
+    text-align: center;
+  }
 }

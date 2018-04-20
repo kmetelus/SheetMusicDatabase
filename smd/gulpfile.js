@@ -1,3 +1,9 @@
+/*
+ npm i gulp gulp-sass gulp-clean-css gulp-uglify gulp-rename gulp-changed --save-dev
+ ^^^^^^^^^^^^^^^^
+ Run this to get all dependencies for file
+*/
+
 // dependencies
 let gulp = require('gulp');
 let sass = require('gulp-sass');

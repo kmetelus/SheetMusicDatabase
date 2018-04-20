@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 
-class Searchbar extends Component {
+class FormFill extends Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    this.name = props.name;
     this.state = {
       searchText: '',
       searchResult: [],
@@ -17,10 +18,10 @@ class Searchbar extends Component {
   render() {
     return (
       <div>
-        <input type="text" name="searchText" value={this.state.searchText} onChange={this.onChange.bind(this)} />
+        <input type="text" name={this.name} value={this.state.searchText} onChange={this.onChange.bind(this)} />
       </div>
     );
   }
 }
 
-export default Searchbar;
+export default FormFill;
